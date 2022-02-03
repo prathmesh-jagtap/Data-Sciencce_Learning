@@ -1,0 +1,8 @@
+zip.workerScriptsPath="../assets/js/article/initialization/mnist/zip/";function extract(file,data,draw){zip.createReader(new zip.HttpReader("../assets/data/"+file),function(reader){reader.getEntries(function(entries){entries[0].getData(new zip.TextWriter(),function(text){process(text,data);reader.close(function(){draw(data["images"].slice(0,100),0,0);});},function(current,total){d3.select("#percent").text(d3.format(".0%")(current/total));});});},function(error){console.log('error loading '+file);});}
+function sum(a,b){for(var i=0;i<b.length;i++){b[i]+=a[i];}
+return b;}
+function mean(x){var n=x.length,mu=x.reduce(sum).map((a)=>a/n);return mu;}
+function std(x,mu){var neg_mu=mu.map((a)=>-a),e=x.map((a)=>sum(a,neg_mu)),se=e.map((a)=>a.map((a)=>Math.pow(a,2))),mse=mean(se),sigma=mse.map(Math.sqrt);return sigma;}
+function process(text,data){var lines=text.split(/\r\n|\n/);var images=[];var labels=[];for(var i=0;i<lines.length-1;i++){var digits=lines[i].split(',');labels.push(parseInt(digits[0]));var image=[];for(var j=1;j<digits.length;j++){image.push(parseFloat(digits[j])/255.0);}
+images.push(image);}
+data["images"]=images;data["labels"]=labels;data['size']=i;}
